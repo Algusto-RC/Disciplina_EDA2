@@ -4,35 +4,35 @@ int main() {
     int N;
     scanf("%d", &N);
 
-    int vetor[N];
-    int soma = 0;
+    int valores[N];
+    long long soma = 0;
 
-    // Lê os elementos do vetor e calcula a soma
+    // Lê os valores e calcula a soma
     for (int i = 0; i < N; i++) {
-        scanf("%d", &vetor[i]);
-        soma += vetor[i];
+        scanf("%d", &valores[i]);
+        soma += valores[i];
     }
 
-    // Calcula a média inteira
+    // Calcula a média aritmética inteira
     int media = soma / N;
+    int encontrou_maior = 0;
 
-    // Verifica os elementos maiores que a média e exibe-os
-    int encontrou = 0;
+    // Verifica e imprime os elementos maiores que a média
     for (int i = 0; i < N; i++) {
-        if (vetor[i] > media) {
-            if (encontrou) {
+        if (valores[i] > media) {
+            if (encontrou_maior) {
                 printf(" ");
             }
-            printf("%d", vetor[i]);
-            encontrou = 1;
+            printf("%d", valores[i]);
+            encontrou_maior = 1;
         }
     }
 
-    // Se não houver elementos maiores que a média, imprime 0
-    if (!encontrou) {
+    // Caso não tenha encontrado nenhum elemento maior que a média
+    if (!encontrou_maior) {
         printf("0");
     }
-
+    
     printf("\n");
     return 0;
 }

@@ -1,38 +1,39 @@
 #include <stdio.h>
 #include <string.h>
+#include <ctype.h> 
 
-int validaSigla(char *nome, char *sigla) {
+
+int verificar_sigla(const char *nome, const char *sigla, int tamanho_sigla) {
     int i = 0, j = 0;
-    int nomeLen = strlen(nome);
-    int siglaLen = strlen(sigla);
+    int tamanho_nome = strlen(nome);
 
-    // Caso especial: se a última letra da sigla é 'X', ignore a última letra e considere apenas as duas primeiras letras
-    if (sigla[2] == 'X') {
-        siglaLen = 2;
-    }
-
-    // Percorre o nome do aeroporto e tenta encontrar os caracteres da sigla em ordem
-    while (i < nomeLen && j < siglaLen) {
+    while (i < tamanho_nome && j < tamanho_sigla) {
         if (nome[i] == sigla[j]) {
-            j++; // Avança na sigla ao encontrar a letra correspondente
+            j++;
         }
-        i++; // Avança no nome do aeroporto
+        i++;
     }
+    
 
-    // Se todos os caracteres da sigla foram encontrados, então a sigla é válida
-    return j == siglaLen;
+    return j == tamanho_sigla;
 }
 
 int main() {
     char nome[100001];
     char sigla[4];
+    
 
-    // Leitura da entrada
     scanf("%s", nome);
     scanf("%s", sigla);
+    
 
-    // Verificação e impressão do resultado
-    if (validaSigla(nome, sigla)) {
+    for (int i = 0; nome[i] != '\0'; i++) {
+        nome[i] = toupper(nome[i]);
+    }
+    
+    int tamanho_sigla = (sigla[2] == 'X') ? 2 : 3;
+
+    if (verificar_sigla(nome, sigla, tamanho_sigla)) {
         printf("Sim\n");
     } else {
         printf("Nao\n");

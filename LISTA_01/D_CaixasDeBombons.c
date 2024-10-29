@@ -1,33 +1,43 @@
 #include <stdio.h>
 
 int main() {
-    // Declaração das variáveis
-    long long a, b, c;
-    int E, P, S;
+    long int amendoim, chocolate_branco, chocolate_ao_leite;
 
-    // Entrada de dados
-    scanf("%lld %lld %lld", &a, &b, &c);
+    scanf("%ld %ld %ld", &amendoim, &chocolate_branco, &chocolate_ao_leite);
 
-    // Resolvendo o sistema de equações através de força bruta
-    // Itera o número de caixas do tipo Especial, Predileta e Sortida
-    for (E = 0; E <= 1000000000; E++) {
-        for (P = 0; P <= 1000000000; P++) {
-            for (S = 0; S <= 1000000000; S++) {
-                // Calcula o consumo de cada ingrediente para cada quantidade de caixa
-                long long amendoim_usado = 150 * E + 50 * P + 50 * S;
-                long long chocolate_branco_usado = 750 * E + 750 * P + 500 * S;
-                long long chocolate_ao_leite_usado = 600 * E + 900 * P + 750 * S;
+    const int crocante_amendoim = 5 * 30;
+    const int crocante_choco_branco = 25 * 30;
+    const int crocante_choco_leite = 20 * 30;
 
-                // Verifica se os consumos coincidem com os dados de entrada
-                if (amendoim_usado == a && chocolate_branco_usado == b && chocolate_ao_leite_usado == c) {
-                    printf("%d %d %d\n", E, P, S);
-                    return 0;
+    const int predileta_amendoim = 5 * 10;
+    const int predileta_choco_branco = 25 * 10 + 25 * 20;
+    const int predileta_choco_leite = 20 * 10 + 25 * 20;
+
+    const int sortida_amendoim = 5 * 10;
+    const int sortida_choco_branco = 25 * 10 + 25 * 10;
+    const int sortida_choco_leite = 20 * 10 + 25 * 10 + 50 * 10;
+
+    int sol_especial = 0, sol_predileta = 0, sol_sortida = 0;
+    int solucao_encontrada = 0;
+
+    for (int especial = 0; especial <= 109 && !solucao_encontrada; especial++) {
+        for (int predileta = 0; predileta <= 109 && !solucao_encontrada; predileta++) {
+            for (int sortida = 0; sortida <= 109 && !solucao_encontrada; sortida++) {
+                long int total_amendoim = especial * crocante_amendoim + predileta * predileta_amendoim + sortida * sortida_amendoim;
+                long int total_choco_branco = especial * crocante_choco_branco + predileta * predileta_choco_branco + sortida * sortida_choco_branco;
+                long int total_choco_leite = especial * crocante_choco_leite + predileta * predileta_choco_leite + sortida * sortida_choco_leite;
+
+                if (total_amendoim == amendoim && total_choco_branco == chocolate_branco && total_choco_leite == chocolate_ao_leite) {
+                    sol_especial = especial;
+                    sol_predileta = predileta;
+                    sol_sortida = sortida;
+                    solucao_encontrada = 1;
                 }
             }
         }
     }
 
-    // Se nenhuma solução foi encontrada, imprime um erro
-    printf("Sem solução\n");
+    printf("%d %d %d\n", sol_especial, sol_predileta, sol_sortida);
+
     return 0;
 }

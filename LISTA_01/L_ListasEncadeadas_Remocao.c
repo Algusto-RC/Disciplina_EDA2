@@ -1,75 +1,50 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// Definição da estrutura celula
 typedef struct celula {
     int dado;
     struct celula *prox;
 } celula;
 
-// Função para inserir um elemento x no início da lista encadeada
-void insere_inicio(celula *le, int x) {
-    celula *nova_celula = (celula *)malloc(sizeof(celula));
-    if (nova_celula == NULL) {
-        printf("Erro ao alocar memória.\n");
-        return;
-    }
-    nova_celula->dado = x;
-    nova_celula->prox = le->prox; // Aponta o novo nó para o primeiro elemento
-    le->prox = nova_celula;       // Atualiza o nó cabeça para apontar para o novo nó
+int remove_depois(celula *p) {
+    if (p == NULL || p->prox == NULL) return 0; 
+
+    celula *aux = p->prox; 
+    p->prox = aux->prox;  
+    int valor_removido = aux->dado; 
+    free(aux);
+
+    return valor_removido;
 }
 
-// Função para inserir um elemento x antes da primeira ocorrência de y
-void insere_antes(celula *le, int x, int y) {
-    celula *atual = le->prox;  // Começa a partir do primeiro elemento
-    celula *anterior = le;     // O nó anterior começa sendo o nó cabeça
+void remove_elemento(celula *le, int x) {
+    celula *ant = le;
+    celula *pro = le->prox;
 
-    while (atual != NULL && atual->dado != y) {
-        anterior = atual;
-        atual = atual->prox;
+    while (pro != NULL && pro->dado != x) {  
+        ant = pro;
+        pro = pro->prox;
     }
-
-    celula *nova_celula = (celula *)malloc(sizeof(celula));
-    if (nova_celula == NULL) {
-        printf("Erro ao alocar memória.\n");
-        return;
-    }
-    nova_celula->dado = x;
-
-    if (atual == NULL) {
-        // Se y não foi encontrado, insere no final da lista
-        anterior->prox = nova_celula;
-        nova_celula->prox = NULL; // O novo nó é o último
-    } else {
-        // Insere antes do nó que contém y
-        anterior->prox = nova_celula;
-        nova_celula->prox = atual;
+    
+    if (pro != NULL) {  
+        ant->prox = pro->prox; 
+        free(pro);         
     }
 }
 
-// Função para imprimir a lista (opcional, para verificar inserções)
-void imprime_lista(celula *le) {
-    celula *atual = le->prox; // Começa a partir do primeiro elemento
-    while (atual != NULL) {
-        printf("%d -> ", atual->dado);
-        atual = atual->prox;
+void remove_todos_elementos(celula *le, int x) {
+    celula *ant = le;
+    celula *pro = le->prox;
+
+    while (pro != NULL) {
+        if (pro->dado == x) {
+            ant->prox = pro->prox;
+            celula *aux = pro;
+            pro = pro->prox;
+            free(aux);
+        } else {
+            ant = pro;
+            pro = pro->prox;
+        }
     }
-    printf("NULL\n");
-}
-
-int main() {
-    celula *lista = (celula *)malloc(sizeof(celula)); // Nó cabeça
-    lista->prox = NULL; // Inicialmente, a lista está vazia
-
-    // Inserindo elementos
-    insere_inicio(lista, 10);
-    insere_inicio(lista, 20);
-    insere_antes(lista, 15, 10); // Inserindo 15 antes do primeiro 10
-    insere_antes(lista, 25, 30);  // Inserindo 25 no final, pois 30 não existe
-
-    // Imprimindo a lista
-    imprime_lista(lista);
-
-    // Liberar a memória (não implementado aqui)
-    return 0;
 }
